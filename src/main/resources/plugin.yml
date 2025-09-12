@@ -1,0 +1,5 @@
+name: modernac
+version: '${version}'
+main: com.mixay.testac.Modernac
+api-version: '1.16'
+load: STARTUP
