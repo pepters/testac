@@ -1,30 +1,33 @@
 package com.mixay.testac;
 
-import java.util.HashSet;
+import com.sun.org.apache.xalan.internal.xsltc.dom.SingletonIterator;
+import io.github.retrooper.packetevents.util.SpigotConversionUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import java.util.HashMap;
 import java.util.UUID;
 
 public class StorageManager {
-    private static HashSet <UUID> queuedforban = new HashSet<>();
-    private static HashSet <UUID> swungplayers = new HashSet<>();
-    public static void addtoqueue (UUID uuid) {
-        queuedforban.add(uuid);
+    private static HashMap<UUID, PlayerData> players = new HashMap<>();
+    public static void addPlayer (UUID uuid, String name) {
+        players.put(uuid, new PlayerData(name));
     }
-    public static void flushqueue () {
-        queuedforban.clear();
+    public static PlayerData getPlayer (UUID uuid) {
+        return players.get(uuid);
     }
-    public static void removefromqueue (UUID uuid) {
-        queuedforban.remove(uuid);
+    public static PlayerData getPlayer (String nick) {
+        Player p = Bukkit.getPlayer(nick);
+        if (p!=null) {
+            UUID id = p.getUniqueId();
+            return players.get(id);
+        }
+        return null;
     }
-    public static boolean isinqueue (UUID uuid) {
-        return queuedforban.contains(uuid);
+    public static void updatePlayer (UUID id, PlayerData data) {
+        players.replace(id, data);
     }
-    public static boolean playerswung (UUID uuid) {
-        return swungplayers.contains(uuid);
-    }
-    public static void addswung (UUID uuid) {
-        swungplayers.add(uuid);
-    }
-    public static void finishswing (UUID uuid) {
-        swungplayers.remove(uuid);
+    public static void removePlayer (UUID id) {
+        players.remove(id);
     }
 }
